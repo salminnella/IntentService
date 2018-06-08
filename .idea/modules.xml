@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/IntentServicePractice.iml" filepath="$PROJECT_DIR$/IntentServicePractice.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/IntentServiceSleeper.iml" filepath="$PROJECT_DIR$/IntentServiceSleeper.iml" />
+>>>>>>> 8d581020aa44c4c81c3f2de58af3c135c4d510cb
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
