@@ -17,6 +17,7 @@ gen/
 /app/google-services.json
 
 # settings etc
+.gitignore
 *.iml
 .gradle
 /local.properties
