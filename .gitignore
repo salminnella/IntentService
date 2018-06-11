@@ -18,7 +18,7 @@ gen/
 
 # settings etc
 .gradle
-/local.properties
+local.properties
 .DS_Store
 /captures
 .externalNativeBuild
