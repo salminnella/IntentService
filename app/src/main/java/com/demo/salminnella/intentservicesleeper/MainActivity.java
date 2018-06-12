@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button downloadButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,15 +22,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        downloadButton = (Button) findViewById(R.id.download_button_main);
+        downloadButton = findViewById(R.id.download_button_main);
     }
 
     private void setClickListener(View view) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startIntentService();
             }
         });
+    }
+
+    private void startIntentService() {
+
     }
 }

@@ -3,10 +3,15 @@ package com.demo.salminnella.intentservicesleeper;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.ResultReceiver;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -64,21 +69,18 @@ public class DownloadIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         final ResultReceiver resultReceiver = intent.getParcelableExtra("receiver");
+        resultReceiver.send(STATUS_RUNNING, Bundle.EMPTY);
 
-        FirebaseDatabase fbDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference fbRef = fbDatabase.getReference();
+        final String action = intent.getAction();
 
-        if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_DOWNLOAD_STRING.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionDownload(param1, param2);
-            } else if (ACTION_UPLOAD_STRING.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionUpload(param1, param2);
-            }
+        if (ACTION_DOWNLOAD_STRING.equals(action)) {
+            final String param1 = intent.getStringExtra(EXTRA_PARAM1);
+            final String param2 = intent.getStringExtra(EXTRA_PARAM2);
+            handleActionDownload(param1, param2, resultReceiver);
+        } else if (ACTION_UPLOAD_STRING.equals(action)) {
+            final String param1 = intent.getStringExtra(EXTRA_PARAM1);
+            final String param2 = intent.getStringExtra(EXTRA_PARAM2);
+            handleActionUpload(param1, param2);
         }
 
         Log.d(TAG, "Intent Service Stopping!");
@@ -88,9 +90,21 @@ public class DownloadIntentService extends IntentService {
      * Handle action Foo in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionDownload(String param1, String param2) {
+    private void handleActionDownload(String param1, String param2, final ResultReceiver resultReceiver) {
         // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
+        FirebaseDatabase fbDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference fbRef = fbDatabase.getReference();
+        fbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: snapshot = " + dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                resultReceiver.send(STATUS_ERROR, Bundle.EMPTY);
+            }
+        });
     }
 
     /**
